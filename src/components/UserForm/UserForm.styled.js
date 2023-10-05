@@ -29,11 +29,16 @@ export const LabelForm = styled.label`
 `;
 
 export const Buttons = styled.button`
-  display: flex;
-  justify-content: center;
   width: 50%;
   padding: 8px 0;
-  border: 1px solid black;
+  cursor: pointer;
+  border: none;
   border-radius: 12px;
   background-color: #33ffff;
+  transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    background-color: #60e160;
+  }
 `;

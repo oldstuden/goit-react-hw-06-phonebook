@@ -22,9 +22,8 @@ export const Search = styled.input`
 `;
 
 export const ResetButtons = styled.button`
-  background-color: transparent;
   padding: 8px 16px;
-  border-radius: 36px;
+  border-radius: 12px;
   border: none;
   background-color: #33ffff;
   cursor: pointer;
@@ -32,7 +31,7 @@ export const ResetButtons = styled.button`
 
   &:hover,
   &:focus {
-    background-color: red;
+    background-color: #60e160;
   }
 `;
 

@@ -52,11 +52,7 @@ export const UserForm = () => {
     toast.success(`${name} has succesfully added to your phonebook`);
     resetForm();
   };
-  // const handleSubmit = (formData, { resetForm }) => {
-  //   const { name, number } = formData;
-  //   dispatch(addContact(name, number));
-  //   resetForm();
-  // };
+
   return (
     <div>
       <Wrap
