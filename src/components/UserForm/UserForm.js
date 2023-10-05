@@ -7,8 +7,10 @@ import {
   Buttons,
   ErrMessage,
 } from './UserForm.styled';
-import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContacts } from 'redux/contactsSlice';
+import { getContacts } from 'redux/selectors';
+import toast, { Toaster } from 'react-hot-toast';
 
 const schema = yup.object().shape({
   name: yup
@@ -27,22 +29,38 @@ const schema = yup.object().shape({
     .required(),
 });
 
-const initialValue = {
-  name: '',
-  number: '',
-};
-
 export const UserForm = () => {
+  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
-  const handleSubmit = (formData, { resetForm }) => {
-    const { name, number } = formData;
-    dispatch(addContact(name, number));
+  const handleSubmit = (values, { resetForm }) => {
+    const { name, number } = values;
+
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
+      toast.error(`${name} already exists.`);
+      resetForm();
+      return;
+    }
+
+    dispatch(addContacts(name, number));
+
+    const updatedContacts = [...contacts, { name, number }];
+    window.localStorage.setItem('contacts', JSON.stringify(updatedContacts));
+    toast.success(`${name} has succesfully added to your phonebook`);
     resetForm();
   };
+  // const handleSubmit = (formData, { resetForm }) => {
+  //   const { name, number } = formData;
+  //   dispatch(addContact(name, number));
+  //   resetForm();
+  // };
   return (
     <div>
       <Wrap
-        initialValues={initialValue}
+        initialValues={{ name: '', number: '' }}
         validationSchema={schema}
         onSubmit={handleSubmit}
       >
@@ -58,6 +76,7 @@ export const UserForm = () => {
             <ErrMessage name="number" component="p" />
           </LabelForm>
           <Buttons type="submit">Add to contact</Buttons>
+          <Toaster />
         </ContactForm>
       </Wrap>
     </div>
