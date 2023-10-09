@@ -17,7 +17,6 @@ const schema = yup.object().shape({
     .string()
     .matches(/^[a-zA-Zа-яА-Я\s'-]*$/, 'Name should not contain numbers')
     .required(),
-  contacts: yup.array(),
   number: yup
     .string()
     .min(5, 'Too short  phone number')
@@ -33,23 +32,19 @@ export const UserForm = () => {
   const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
   const handleSubmit = (values, { resetForm }) => {
-    const { name, number } = values;
-
     if (
       contacts.find(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
+        ({ name }) => name.toLowerCase() === values.name.toLowerCase()
       )
     ) {
-      toast.error(`${name} already exists.`);
+      toast.error(`${values.name} already exists.`);
       resetForm();
       return;
     }
 
-    dispatch(addContacts(name, number));
+    dispatch(addContacts(values));
 
-    const updatedContacts = [...contacts, { name, number }];
-    window.localStorage.setItem('contacts', JSON.stringify(updatedContacts));
-    toast.success(`${name} has succesfully added to your phonebook`);
+    toast.success(`${values.name} has succesfully added to your phonebook`);
     resetForm();
   };
 
